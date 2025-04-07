@@ -41,6 +41,7 @@
 #include <vector>
 
 #ifdef SIMPLECPP_WINDOWS
+#include <direct.h>
 #include <windows.h>
 #undef ERROR
 #else
