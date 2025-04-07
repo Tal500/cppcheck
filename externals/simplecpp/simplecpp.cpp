@@ -42,10 +42,13 @@
 
 #ifdef _WIN32
 #include <direct.h>
-#include <windows.h>
-#undef ERROR
 #else
 #include <unistd.h>
+#endif
+
+#ifdef SIMPLECPP_WINDOWS
+#include <windows.h>
+#undef ERROR
 #endif
 
 #if __cplusplus >= 201103L
