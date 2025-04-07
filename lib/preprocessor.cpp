@@ -906,29 +906,6 @@ void Preprocessor::error(const std::string &filename, unsigned int linenr, const
                                         Certainty::normal));
 }
 
-#if defined (__WIN32__)
-#define NOMINMAX
-#include <Windows.h>
-#endif
-
-static std::string currentDirectoryOSCalc_2() {
-#if defined (__WIN32__)
-    TCHAR NPath[MAX_PATH];
-    GetCurrentDirectory(MAX_PATH, NPath);
-#ifdef _UNICODE
-    // convert the result from TCHAR* to char*
-    char NPathA[MAX_PATH];
-    ::WideCharToMultiByte(CP_ACP, 0, NPath, lstrlen(NPath), NPathA, MAX_PATH, NULL, NULL);
-    return NPathA;
-#else
-    // in this case, TCHAR* is just defined to be a char*
-    return NPath;
-#endif
-#else
-    return "";
-#endif
-}
-
 // Report that include is missing
 void Preprocessor::missingInclude(const std::string &filename, unsigned int linenr, const std::string &header, HeaderTypes headerType)
 {
@@ -940,9 +917,9 @@ void Preprocessor::missingInclude(const std::string &filename, unsigned int line
         locationList.emplace_back(filename, linenr, 0);
     }
     ErrorMessage errmsg(std::move(locationList), mFile0, Severity::information,
-                        ((headerType==SystemHeader) ?
+                        (headerType==SystemHeader) ?
                         "Include file: <" + header + "> not found. Please note: Cppcheck does not need standard library headers to get proper results." :
-                        "Include file: \"" + header + "\" not found.") + " current dir: " + currentDirectoryOSCalc_2(),
+                        "Include file: \"" + header + "\" not found.",
                         (headerType==SystemHeader) ? "missingIncludeSystem" : "missingInclude",
                         Certainty::normal);
     mErrorLogger.reportErr(errmsg);
