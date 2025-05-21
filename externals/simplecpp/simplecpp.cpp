@@ -3181,14 +3181,14 @@ static std::string getRelativeFileName(const std::string &baseFile, const std::s
     if (exactRelative) {
         const std::string absolutePath = expandBaseWithAbsolutePath ? path : toAbsolutePath(path);
         const std::string absoluteBaseFile = expandBaseWithAbsolutePath ? baseFileNormalized : toAbsolutePath(baseFileNormalized);
-        return extractRelativePathFromAbsolute(absolutePath, dirPath<true>(absoluteBaseFile));
+        return extractRelativePathFromAbsolute(absolutePath);
     }
     return path;
 }
 
 static std::string openHeaderRelative(std::ifstream &f, const std::string &sourcefile, const std::string &header)
 {
-    return openHeader(f, getRelativeFileName<false, false>(sourcefile, header));
+    return openHeader(f, getRelativeFileName<true, true>(sourcefile, header));
 }
 
 // returns the simplified header path:
@@ -3366,8 +3366,6 @@ std::map<std::string, simplecpp::TokenList*> simplecpp::load(const simplecpp::To
         if (!f.is_open())
             continue;
         f.close();
-        if (ret.find(header2) != ret.end())
-            continue;
 
         TokenList *tokens = new TokenList(header2, filenames, outputList);
         if (dui.removeComments)
