@@ -3658,8 +3658,8 @@ void simplecpp::preprocess(simplecpp::TokenList &output, const simplecpp::TokenL
                         if (dui.removeComments)
                             tokens->removeComments();
                         if (filedata.find(header2) != filedata.end()) {
-                            std::cout << "header: " << header << "header2: " << header2 << std::endl;
-                            std::cerr << "header: " << header << "header2: " << header2 << std::endl;
+                            std::cout << "header: " << header << " header2: " << header2 << " source: " << rawtok->location.file() << " systemheader: " << systemheader << std::endl;
+                            std::cerr << "header: " << header << " header2: " << header2 << " source: " << rawtok->location.file() << " systemheader: " << systemheader << std::endl;
                             throw "header2 is already there!" + header2;
                         }
                         filedata[header2] = tokens;
