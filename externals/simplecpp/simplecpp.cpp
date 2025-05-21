@@ -3294,6 +3294,7 @@ static bool hasFile(const std::map<std::string, simplecpp::TokenList *> &filedat
     return !getFileIdPath(filedata, sourcefile, header, dui, systemheader).empty();
 }
 
+template <typename T>
 struct PotentionalDeletor {
     explicit PotentionalDeletor(T* ptr = nullptr) : ptr(ptr) {}
     ~PotentionalDeletor() {
