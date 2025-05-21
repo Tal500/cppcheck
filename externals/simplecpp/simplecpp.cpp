@@ -3227,6 +3227,8 @@ static std::string openHeader(std::ifstream &f, const simplecpp::DUI &dui, const
     // prefer first to search the header relatively to source file if found, when not a system header
     if (!systemheader) {
         std::string relativeHeader = openHeaderRelative(f, sourcefile, header);
+        if (endsWith(header, "aboutdialog.h"))// temp printing
+            std::cout << "relativeHeader: " << relativeHeader << " sourcefile: " << sourcefile << " header: " << header << std::endl;
         if (!relativeHeader.empty()) {
             return relativeHeader;
         }
