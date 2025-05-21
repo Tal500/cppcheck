@@ -3659,6 +3659,9 @@ void simplecpp::preprocess(simplecpp::TokenList &output, const simplecpp::TokenL
                         TokenList * const tokens = new TokenList(header2, files, outputList);
                         if (dui.removeComments)
                             tokens->removeComments();
+                        if (filedata.find(header2) != filedata.end()) {
+                            throw "header2 is already there!" + header2;
+                        }
                         filedata[header2] = tokens;
                     }
                 }
