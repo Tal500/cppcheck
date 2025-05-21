@@ -3174,7 +3174,7 @@ template <bool expandBaseWithAbsolutePath, bool exactRelative>
 static std::string getRelativeFileName(const std::string &baseFile, const std::string &header)
 {
     const std::string baseFileSimplified = simplecpp::simplifyPath(baseFile);
-    const std::string baseFileNormalized = (expandBaseWithAbsolutePath && !isAbsolutePath(baseFileSimplified)) ? (currentDirectory() + "/" + baseFileSimplified) : baseFileSimplified;
+    const std::string baseFileNormalized = (expandBaseWithAbsolutePath && !isAbsolutePath(baseFileSimplified)) ? simplecpp::simplifyPath(currentDirectory() + "/" + baseFileSimplified) : baseFileSimplified;
 
     const std::string headerSimplified = simplecpp::simplifyPath(header);
     const std::string path = isAbsolutePath(headerSimplified) ? headerSimplified : (dirPath<true>(baseFileNormalized) + headerSimplified);
