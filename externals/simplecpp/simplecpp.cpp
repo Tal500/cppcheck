@@ -3177,7 +3177,7 @@ static std::string getRelativeFileName(const std::string &baseFile, const std::s
     const std::string baseFileNormalized = (expandBaseWithAbsolutePath && !isAbsolutePath(baseFileSimplified)) ? simplecpp::simplifyPath(currentDirectory() + "/" + baseFileSimplified) : baseFileSimplified;
 
     const std::string headerSimplified = simplecpp::simplifyPath(header);
-    const std::string path = isAbsolutePath(headerSimplified) ? headerSimplified : (dirPath<true>(baseFileNormalized) + headerSimplified);
+    const std::string path = isAbsolutePath(headerSimplified) ? headerSimplified : simplecpp::simplifyPath(dirPath<true>(baseFileNormalized) + headerSimplified);
     if (exactRelative) {
         const std::string absolutePath = expandBaseWithAbsolutePath ? path : toAbsolutePath(path);
         const std::string absoluteBaseFile = expandBaseWithAbsolutePath ? baseFileNormalized : toAbsolutePath(baseFileNormalized);
