@@ -3294,19 +3294,6 @@ static bool hasFile(const std::map<std::string, simplecpp::TokenList *> &filedat
     return !getFileIdPath(filedata, sourcefile, header, dui, systemheader).empty();
 }
 
-template <typename T>
-struct PotentionalDeletor {
-    explicit PotentionalDeletor(T* ptr = nullptr) : ptr(ptr) {}
-    ~PotentionalDeletor() {
-        delete ptr;// note: deleting nullptr is just a no-op
-    }
-
-    T* ptr;
-
-private:
-    PotentionalDeletor(const PotentionalDeletor&); // intentionally unimplemented
-};
-
 std::map<std::string, simplecpp::TokenList*> simplecpp::load(const simplecpp::TokenList &rawtokens, std::vector<std::string> &filenames, const simplecpp::DUI &dui, simplecpp::OutputList *outputList)
 {
 #ifdef SIMPLECPP_WINDOWS
@@ -3351,12 +3338,9 @@ std::map<std::string, simplecpp::TokenList*> simplecpp::load(const simplecpp::To
     }
 
     for (const Token *rawtok = rawtokens.cfront(); rawtok || !filelist.empty(); rawtok = rawtok ? rawtok->next : nullptr) {
-        PotentionalDeletor<const Token> rawtokDeletor;
         if (rawtok == nullptr) {
-            // In this case, pop the filelist back token, and mark it for delete after this iteration
             rawtok = filelist.back();
             filelist.pop_back();
-            rawtokDeletor.ptr = rawtok;
         }
 
         if (rawtok->op != '#' || sameline(rawtok->previousSkipComments(), rawtok))
@@ -3382,6 +3366,8 @@ std::map<std::string, simplecpp::TokenList*> simplecpp::load(const simplecpp::To
         if (!f.is_open())
             continue;
         f.close();
+        if (ret.find(header2) != ret.end())
+            continue;
 
         TokenList *tokens = new TokenList(header2, filenames, outputList);
         if (dui.removeComments)
