@@ -3227,7 +3227,7 @@ static std::string openHeader(std::ifstream &f, const simplecpp::DUI &dui, const
     // prefer first to search the header relatively to source file if found, when not a system header
     if (!systemheader) {
         std::string relativeHeader = openHeaderRelative(f, sourcefile, header);
-        if (endsWith(header, "aboutdialog.h"))// temp printing
+        if (endsWith(header, "filelister.h"))// temp printing
             std::cout << "relativeHeader: " << relativeHeader << " sourcefile: " << sourcefile << " header: " << header << std::endl;
         if (!relativeHeader.empty()) {
             return relativeHeader;
@@ -3368,6 +3368,10 @@ std::map<std::string, simplecpp::TokenList*> simplecpp::load(const simplecpp::To
         if (!f.is_open())
             continue;
         f.close();
+        if (ret.find(header2) != ret.end()) {
+            std::cout << "in ret: header: " << header << " header2: " << header2 << " source: " << rawtok->location.file() << " systemheader: " << systemheader << std::endl;
+            abort();
+        }
 
         TokenList *tokens = new TokenList(header2, filenames, outputList);
         if (dui.removeComments)
@@ -3661,8 +3665,7 @@ void simplecpp::preprocess(simplecpp::TokenList &output, const simplecpp::TokenL
                             tokens->removeComments();
                         if (filedata.find(header2) != filedata.end()) {
                             std::cout << "header: " << header << " header2: " << header2 << " source: " << rawtok->location.file() << " systemheader: " << systemheader << std::endl;
-                            std::cerr << "header: " << header << " header2: " << header2 << " source: " << rawtok->location.file() << " systemheader: " << systemheader << std::endl;
-                            throw "header2 is already there!" + header2;
+                            abort();
                         }
                         filedata[header2] = tokens;
                     }
